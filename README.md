@@ -1,2 +1,3 @@
-# sample-node-app
-Sample Nodejs Application with CRUD REST APIs
+# Mock API's Builder
+
+Node.js Application to build Mock API's
