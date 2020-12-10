@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
+const { verifyToken } = require('./helpers/tokenVerify')
+// Change here
 const dbUrl = 'mongodb://sxp:sxptECHSOPHY@mongo:27017/mock-builder-dev';
 
 mongoose.connect(dbUrl, {
@@ -23,10 +25,14 @@ db.once("open", () => {
 
 app.use(express.json());
 
+const appRouter = require("./routes/AppRoutes");
+app.use("/apps", appRouter);
+
 const MockRouter = require("./routes/MockRoutes");
-app.use("/mocks", MockRouter);
+app.use("/apps/:appId/mocks", verifyToken, MockRouter);
 
 const MockRunnerRouter = require("./routes/MockRunnerRoutes");
-app.use("/api", MockRunnerRouter);
+app.use("/apps/:appId/api", verifyToken, MockRunnerRouter);
 
-app.listen(3000, () => console.log("server started"));
+// Change here
+app.listen(3009, () => console.log("server started"));

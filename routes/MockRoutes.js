@@ -1,11 +1,14 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const Mock = require("../models/Mock");
 
 // Get all mocked APIs created
 router.get("/", async (req, res) => {
   try {
-    const mocks = await Mock.find();
+    if (!req.params.appId) {
+      return res.json({ message: 'App Id Required.' });
+    }
+    const mocks = await Mock.find({ appId: req.params.appId });
     res.json(mocks);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -14,11 +17,11 @@ router.get("/", async (req, res) => {
 
 // Create one mock api
 router.post("/", async (req, res) => {
-  let checkMock = await Mock.findOne({ name: req.body.name, method: req.body.method });
+  let checkMock = await Mock.findOne({ name: req.body.name, method: req.body.method, appId: req.params.appId });
   if (checkMock !== null) {
     return res.status(400).json({ message: "Mock already exists" });
   }
-  const mock = new Mock(req.body);
+  const mock = new Mock({ ...req.body, appId: req.params.appId });
 
   try {
     const newMock = await mock.save();
