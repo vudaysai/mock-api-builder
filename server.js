@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-const dbUrl = 'mongodb://${process.env.mongoUser}:${process.env.mongoUserPassword}@mongo:27017/mock-builder-dev';
+const dbUrl = `mongodb://${process.env.mongoUser}:${process.env.mongoUserPassword}@mongo:27017/mock-builder-dev`;
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
